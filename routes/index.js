@@ -1,4 +1,3 @@
-var express = require('express');
 var router = require('express-promise-router')();
 var jwt = require('jsonwebtoken');
 
@@ -30,6 +29,16 @@ const pool = new Pool({
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
+  res.render('index');
+});
+
+/* POST login */
+router.post('/login', async (req, res, next) => {
+  res.render('index');
+});
+
+/* POST registration */
+router.post('/registration', async (req, res, next) => {
   res.render('index');
 });
 
