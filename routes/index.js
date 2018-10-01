@@ -110,7 +110,7 @@ router.post('/registration', async (req, res, next) => {
 
   var pass = hashPassword(req.body.password);
 
-  var reg = await pool.query('INSERT INTO ' + req.body.role + ' (username, password, salt, contact) VALUES ($1, $2, $3, $4)', [req.body.username, pass.hash, pass.salt, req.body.contact]);
+  var reg = await pool.query('INSERT INTO ' + req.body.role + ' (username, password, salt, contact, firstname, lastname) VALUES ($1, $2, $3, $4, $5, $6)', [req.body.username, pass.hash, pass.salt, req.body.contact, req.body.firstname, req.body.lastname]);
 
   res.status(200).json({error:0, msg: 'We gucci'});
 });
