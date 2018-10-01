@@ -76,7 +76,7 @@ router.post('/login', async (req, res, next) => {
 
   if (isPasswordCorrect(user.password, user.salt, req.body.password)) {
     await pool.query('UPDATE ' + user.tablename + ' SET loginattempts=$1 WHERE username=$2', [0, user.username]);
-    res.status(200).json({error:0, msg: jwtsign(user.tablename, user.username)});
+    res.status(200).json({error:0, msg: "Success!", role: user.tablename, jwt: jwtsign(user.tablename, user.username), firstname: user.firstname, lastname: user.lastname});
     return;
   } else {
     await pool.query('UPDATE ' + user.tablename + ' SET loginattempts=$1, locked=$2 WHERE username=$3', [user.loginattempts + 1, (user.loginattempts + 1) >= 3, user.username]);
