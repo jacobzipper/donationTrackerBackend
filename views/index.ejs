@@ -1,11 +1,281 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Donation Tracker Backend</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1>Donation Tracker Backend</h1>
-    <p>Welcome to the donation tracker backend!</p>
-  </body>
+    <head>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <div class="container">
+              <h1>Donation Tracker API Scrumlords</h1>
+
+<p>CS 2340 project</p>
+
+
+
+<h2>Paths</h2>
+
+    
+    <div class="panel panel-method-get">
+    <div class="panel-heading">
+        <div class="method-summary">Returns a list of all the locations in the db</div>
+        <h3 class="panel-title"><span class="method-name">GET</span> <strong>/locations</strong></h3>
+    </div>
+    <div class="panel-body">
+        <section class="sw-method-description">
+            
+        </section>
+        
+        
+        
+    <section class="sw-response-body">
+        <p><span class="label label-default">application/json</span> </p>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="sw-response-code"></th>
+                <th class="sw-response-description"></th>
+                <th class="sw-response-data-type hidden-xs hidden-sm"></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>200</td>
+                    <td>
+                        <div class="sw-response-description-text">
+                            OK
+                        </div>
+                        <section class="visible-xs visible-sm">
+                            
+    
+<div class="panel panel-definition">
+    <div class="panel-body">
+            <a class="json-schema-ref" href="#/definitions/Locations">#/definitions/Locations</a>
+
+
+    </div>
+</div>                        </section>
+                    </td>
+                    <td class="hidden-xs hidden-sm">
+    
+<div class="panel panel-definition">
+    <div class="panel-body">
+            <a class="json-schema-ref" href="#/definitions/Locations">#/definitions/Locations</a>
+
+
+    </div>
+</div></td>
+                </tr>
+                <tr>
+                    <td>default</td>
+                    <td>
+                        <div class="sw-response-description-text">
+                            Error
+                        </div>
+                        <section class="visible-xs visible-sm">
+                            
+    
+<div class="panel panel-definition">
+    <div class="panel-body">
+            <a class="json-schema-ref" href="#/definitions/Error">#/definitions/Error</a>
+
+
+    </div>
+</div>                        </section>
+                    </td>
+                    <td class="hidden-xs hidden-sm">
+    
+<div class="panel panel-definition">
+    <div class="panel-body">
+            <a class="json-schema-ref" href="#/definitions/Error">#/definitions/Error</a>
+
+
+    </div>
+</div></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+            </div>
+</div>
+
+<h2>Definitions</h2>
+
+    
+    
+<div class="panel panel-definition">
+        <div class="panel-heading">
+                <h3 class="panel-title"><a name="/definitions/Error"></a>Error:
+                    <span class="json-property-type">object</span>
+                </h3>
+        </div>
+    <div class="panel-body">
+        
+    <section class="json-schema-properties">
+    <dl>
+            <dt>
+                <span class="json-property-name">error:</span>
+                <span class="json-property-type">integer</span>
+
+            </dt>
+            <dd>
+
+                An integer error code (0 if no error)
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">msg:</span>
+                <span class="json-property-type">string</span>
+
+            </dt>
+            <dd>
+
+                Message describing the error
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+    </dl>
+</section>
+
+    </div>
+</div>    
+    
+<div class="panel panel-definition">
+        <div class="panel-heading">
+                <h3 class="panel-title"><a name="/definitions/Location"></a>Location:
+                    <span class="json-property-type">object</span>
+                </h3>
+        </div>
+    <div class="panel-body">
+        
+    <section class="json-schema-properties">
+    <dl>
+            <dt>
+                <span class="json-property-name">name:</span>
+                <span class="json-property-type">string</span>
+
+            </dt>
+            <dd>
+
+                Name of the location
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">type:</span>
+                <span class="json-property-type">string</span>
+
+            </dt>
+            <dd>
+
+                The location type
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">latitude:</span>
+                <span class="json-property-type">number</span>
+
+            </dt>
+            <dd>
+
+                The latitude of the location
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">longitude:</span>
+                <span class="json-property-type">number</span>
+
+            </dt>
+            <dd>
+
+                The longitude of the location
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">address:</span>
+                <span class="json-property-type">string</span>
+
+            </dt>
+            <dd>
+
+                The address of the location
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">phone:</span>
+                <span class="json-property-type">string</span>
+
+            </dt>
+            <dd>
+
+                Phone number to contact the location
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+    </dl>
+</section>
+
+    </div>
+</div>    
+    
+<div class="panel panel-definition">
+        <div class="panel-heading">
+                <h3 class="panel-title"><a name="/definitions/Locations"></a>Locations:
+                    <span class="json-property-type">object</span>
+                </h3>
+        </div>
+    <div class="panel-body">
+        
+    <section class="json-schema-properties">
+    <dl>
+            <dt>
+                <span class="json-property-name">error:</span>
+                <span class="json-property-type">integer</span>
+
+            </dt>
+            <dd>
+
+                An integer error code (0 if no error)
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">msg:</span>
+                <span class="json-property-type">string</span>
+
+            </dt>
+            <dd>
+
+                Message describing the error
+                <div class="json-inner-schema">
+                </div>
+            </dd>
+            <dt>
+                <span class="json-property-name">locations:</span>
+                <span class="json-property-type">object[]</span>
+
+            </dt>
+            <dd>
+
+                
+                <div class="json-inner-schema">
+                        <section class="json-schema-array-items">
+    <div class="json-inner-schema">
+            <a class="json-schema-ref" href="#/definitions/Location">#/definitions/Location</a>
+
+
+    </div>
+</section>                </div>
+            </dd>
+    </dl>
+</section>
+
+    </div>
+</div>        </div>
+    </body>
 </html>

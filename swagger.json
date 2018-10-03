@@ -1,0 +1,100 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Donation Tracker API Scrumlords",
+    "description": "CS 2340 project",
+    "version": "1.0.0"
+  },
+  "host": "donationtrackerzipper.herokuapp.com",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/locations": {
+      "get": {
+        "summary": "Returns a list of all the locations in the db",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Locations"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "integer",
+          "description": "An integer error code (0 if no error)"
+        },
+        "msg": {
+          "type": "string",
+          "description": "Message describing the error"
+        }
+      }
+    },
+    "Location": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the location"
+        },
+        "type": {
+          "type": "string",
+          "description": "The location type"
+        },
+        "latitude": {
+          "type": "number",
+          "description": "The latitude of the location"
+        },
+        "longitude": {
+          "type": "number",
+          "description": "The longitude of the location"
+        },
+        "address": {
+          "type": "string",
+          "description": "The address of the location"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number to contact the location"
+        }
+      }
+    },
+    "Locations": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "integer",
+          "description": "An integer error code (0 if no error)"
+        },
+        "msg": {
+          "type": "string",
+          "description": "Message describing the error"
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Location"
+          }
+        }
+      }
+    }
+  }
+}
