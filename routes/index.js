@@ -115,4 +115,9 @@ router.post('/registration', async (req, res, next) => {
   res.status(200).json({error:0, msg: 'We gucci'});
 });
 
+router.get('/locations', async (req, res, next) => {
+  var locs = await pool.query('SELECT * FROM locations');
+  res.status(200).json({error:0, msg: 'Alllllllll gooooooodddd', locations: locs.rows});
+});
+
 module.exports = router;
