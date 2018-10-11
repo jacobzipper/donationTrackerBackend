@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var jwt = require('express-jwt');
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
@@ -11,6 +12,9 @@ var employeeRouter = require('./routes/employee');
 var managerRouter = require('./routes/manager');
 
 var app = express();
+
+const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -23,7 +27,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/admin', adminRouter);
+app.use('/admin', jwt({secret: new Buffer(PUBLIC_KEY)}), function(req, res, next) {
+    if (req.user.role != 'admins') {
+        console.log(req.user);
+        return res.sendStatus(401);
+    }
+    next();
+  },
+  adminRouter);
 app.use('/user', userRouter);
 app.use('/employee', employeeRouter);
 app.use('/manager', managerRouter);
