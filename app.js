@@ -26,19 +26,58 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/admin', jwt({secret: new Buffer(PUBLIC_KEY)}), function(req, res, next) {
+const jwtAuth = jwt({secret: new Buffer(PUBLIC_KEY), issuer: 'scrumlords'});
+
+app.use('/',
+  indexRouter);
+app.use('/user',
+  jwtAuth,
+  function(req, res, next) {
+    if (req.user.role != 'users') {
+        console.log(req.user);
+        return res.sendStatus(401);
+    }
+    next();
+  },
+  indexRouter,
+   userRouter);
+app.use('/employee',
+  jwtAuth,
+  function(req, res, next) {
+    if (req.user.role != 'employees') {
+        console.log(req.user);
+        return res.sendStatus(401);
+    }
+    next();
+  },
+  indexRouter,
+  employeeRouter);
+app.use('/manager',
+  jwtAuth,
+  function(req, res, next) {
+    if (req.user.role != 'managers') {
+        console.log(req.user);
+        return res.sendStatus(401);
+    }
+    next();
+  },
+  indexRouter,
+  employeeRouter,
+  managerRouter);
+app.use('/admin',
+  jwtAuth,
+  function(req, res, next) {
     if (req.user.role != 'admins') {
         console.log(req.user);
         return res.sendStatus(401);
     }
     next();
   },
+  indexRouter,
+  userRouter,
+  employeeRouter,
+  managerRouter,
   adminRouter);
-app.use('/user', userRouter);
-app.use('/employee', employeeRouter);
-app.use('/manager', managerRouter);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

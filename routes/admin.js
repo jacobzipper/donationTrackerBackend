@@ -1,8 +1,5 @@
 const router = require('express-promise-router')();
-const crypto = require('crypto');
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
-const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
 const { Pool, Client } = require('pg');
 
 const pool = new Pool({

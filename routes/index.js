@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
 const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
 const VALID_ROLES = ['admins', 'users', 'employees', 'managers'];
+const SELECT_COLS = ['username', 'password', 'salt', 'locked', 'contact', 'loginattempts', 'firstname', 'lastname'].join(', ');
 const SALT_ITERATIONS = 1000;
 
 function jwtsign(role, username) {
@@ -15,7 +16,8 @@ function jwtsign(role, username) {
   PRIVATE_KEY,
   {
     algorithm: 'RS256',
-    expiresIn: '30d',
+    expiresIn: '10y',
+    issuer: 'scrumlords',
   });
 }
 
@@ -60,7 +62,11 @@ router.post('/login', async (req, res, next) => {
     return;
   }
 
-  var user = await pool.query('SELECT \'admins\' AS tablename, * FROM admins WHERE username = $1 UNION SELECT \'users\' AS tablename, * FROM users WHERE username = $1 UNION SELECT \'employees\' AS tablename, * FROM employees WHERE username = $1 UNION SELECT \'managers\' AS tablename, * FROM managers WHERE username = $1', [req.body.username]);
+  var user = await pool.query('SELECT \'admins\' AS tablename, ' + SELECT_COLS + ' FROM admins WHERE username = $1 ' +
+    'UNION SELECT \'users\' AS tablename, ' + SELECT_COLS + ' FROM users WHERE username = $1 ' +
+    'UNION SELECT \'employees\' AS tablename, ' + SELECT_COLS + ' FROM employees WHERE username = $1 ' +
+    'UNION SELECT \'managers\' AS tablename, ' + SELECT_COLS + ' FROM managers WHERE username = $1',
+    [req.body.username]);
 
   if (user.rows.length == 0) {
     res.status(400).json({error: 1100, msg: 'Username not found'});
@@ -102,7 +108,11 @@ router.post('/registration', async (req, res, next) => {
   }
 
   // Check if Username taken
-  var taken = await pool.query('SELECT * FROM admins WHERE username = $1 UNION SELECT * FROM users WHERE username = $1 UNION SELECT * FROM employees WHERE username = $1 UNION SELECT * FROM managers WHERE username = $1', [req.body.username]);
+  var taken = await pool.query('SELECT ' + SELECT_COLS + ' FROM admins WHERE username = $1 ' +
+    'UNION SELECT ' + SELECT_COLS + ' FROM users WHERE username = $1 ' +
+    'UNION SELECT ' + SELECT_COLS + ' FROM employees WHERE username = $1 ' +
+    'UNION SELECT ' + SELECT_COLS + ' FROM managers WHERE username = $1',
+    [req.body.username]);
   if (taken.rows.length > 0) {
     res.status(400).json({error: 1003, msg: 'Username taken please choose another'});
     return;
@@ -110,7 +120,11 @@ router.post('/registration', async (req, res, next) => {
 
   var pass = hashPassword(req.body.password);
 
-  var reg = await pool.query('INSERT INTO ' + req.body.role + ' (username, password, salt, contact, firstname, lastname) VALUES ($1, $2, $3, $4, $5, $6)', [req.body.username, pass.hash, pass.salt, req.body.contact, req.body.firstname, req.body.lastname]);
+  var reg = await pool.query('INSERT INTO ' + req.body.role +
+    ' (username, password, salt, contact, firstname, lastname)' +
+    ' VALUES ($1, $2, $3, $4, $5, $6)',
+    [req.body.username, pass.hash, pass.salt, req.body.contact,
+    req.body.firstname, req.body.lastname]);
 
   res.status(200).json({error:0, msg: 'We gucci'});
 });
