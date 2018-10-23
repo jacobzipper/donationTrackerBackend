@@ -23,4 +23,30 @@ router.get('/getdonations', async (req, res, next) => {
   res.status(200).json({error: 0, msg: 'Donations at location of manager or employee', donations: donationList.rows});
 });
 
+router.post('/adddonation', async (req, res, next) => {
+  if (req.user.role == 'admins') {
+    var donations = await pool.query('SELECT * FROM donations');
+    res.status(200).json({error: 0, msg: 'Admin add not implemented yet'});
+    return;
+  }
+
+  var locIdFromAcc = await pool.query('SELECT locationid FROM employees WHERE username = $1 UNION SELECT locationid FROM managers WHERE username = $1', [req.user.user]);
+  if (locIdFromAcc.rows.length != 1) {
+    res.status(400).json({error: 1400, msg: 'User not found possibly relog in?'});
+    return;
+  }
+
+  if (!req.body.name || !req.body.description || !req.body.value || !req.body.category) {
+    res.status(400).json({error: 1400, msg: 'Not all necessary params'});
+  }
+  var reg = await pool.query('INSERT INTO donations' +
+    ' (locationid, shortdescription, description, value, type, comments, addedby' + req.user.role.substring(0, req.user.role.length - 1) + ')' +
+    ' VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    [locIdFromAcc.rows[0].locationid, req.body.name, req.body.description, req.body.value,
+    req.body.category, req.body.comments, req.user.user]);
+  res.status(200).json({error: 0, msg: 'Added yeet'});
+  return;
+});
+
+
 module.exports = router;

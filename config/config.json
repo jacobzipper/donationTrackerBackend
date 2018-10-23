@@ -1,0 +1,23 @@
+{
+    "development": {
+        "dialect":"postgres",
+        "ssl": true,
+        "dialectOptions": {
+            "ssl": true
+        }
+    },
+    "test": {
+        "dialect":"postgres",
+        "ssl": true,
+        "dialectOptions": {
+            "ssl": true
+        }
+    },
+    "production": {
+        "dialect":"postgres",
+        "ssl": true,
+        "dialectOptions": {
+            "ssl": true
+        }
+    }
+}

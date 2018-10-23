@@ -46,3 +46,16 @@ INSERT INTO donations (locationid, shortdescription, description, value, type, a
 VALUES (floor(random() * 5 + 1)::int, md5(random()::text), md5(random()::text),
 floor(random() * 100 + 1)::int, (SELECT mycat FROM unnest(enum_range(NULL::donationtype)) mycat ORDER BY random() LIMIT 1),
 (SELECT username FROM admins ORDER BY random() LIMIT 1));
+
+# Update tstamp on donation when row updated
+CREATE OR REPLACE FUNCTION update_tstamp_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.tstamp = now();
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_donations_tstamp BEFORE UPDATE
+    ON donations FOR EACH ROW EXECUTE PROCEDURE
+    update_tstamp_column();
