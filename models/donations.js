@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         type: {
-            type: DataTypes.ENUM("CLOTHING", "HAT", "KITCHEN", "ELECTRONICS", "HOUSEHOLD", "OTHER"),
+            type: DataTypes.ENUM("Clothing", "Hat", "Kitchen", "Electronics", "Household", "Other"),
             allowNull: false
         },
         comments: {
