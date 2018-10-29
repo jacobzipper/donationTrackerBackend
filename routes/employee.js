@@ -56,7 +56,7 @@ router.post('/adddonation', async (req, res, next) => {
         return;
     }
 
-    if (!req.body.name || !req.body.description || !req.body.value || !req.body.category) {
+    if (!req.body.shortdescription || !req.body.description || !req.body.value || !req.body.category || !req.body.name) {
         res.status(400).json({
             error: 1400,
             msg: 'Not all necessary params'
@@ -65,8 +65,8 @@ router.post('/adddonation', async (req, res, next) => {
     var category = req.body.category;
     var reg = await pool.query('INSERT INTO donations' +
         ' (locationid, shortdescription, description, value, category, comments, addedby' + req.user.role.substring(0, req.user.role.length - 1) + ')' +
-        ' VALUES ($1, $2, $3, $4, $5, $6, $7)', [locIdFromAcc.rows[0].locationid, req.body.name, req.body.description, req.body.value,
-            category.substring(0, 1) + category.substring(1, category.length).toLowerCase(), req.body.comments, req.user.user
+        ' VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [locIdFromAcc.rows[0].locationid, req.body.shortdescription, req.body.description, req.body.value,
+            category.substring(0, 1) + category.substring(1, category.length).toLowerCase(), req.body.comments, req.user.user, req.body.name
         ]);
     res.status(200).json({
         error: 0,
