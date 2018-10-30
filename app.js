@@ -30,7 +30,7 @@ const jwtAuth = jwt({secret: new Buffer(PUBLIC_KEY), issuer: 'scrumlords'});
 
 app.use('/',
   indexRouter);
-app.use('/user',
+app.use('/users',
   jwtAuth,
   function(req, res, next) {
     if (req.user.role != 'users') {
@@ -40,8 +40,8 @@ app.use('/user',
     next();
   },
   indexRouter,
-   userRouter);
-app.use('/employee',
+  userRouter);
+app.use('/employees',
   jwtAuth,
   function(req, res, next) {
     if (req.user.role != 'employees') {
@@ -51,8 +51,9 @@ app.use('/employee',
     next();
   },
   indexRouter,
+  userRouter,
   employeeRouter);
-app.use('/manager',
+app.use('/managers',
   jwtAuth,
   function(req, res, next) {
     if (req.user.role != 'managers') {
@@ -62,9 +63,10 @@ app.use('/manager',
     next();
   },
   indexRouter,
+  userRouter,
   employeeRouter,
   managerRouter);
-app.use('/admin',
+app.use('/admins',
   jwtAuth,
   function(req, res, next) {
     if (req.user.role != 'admins') {
