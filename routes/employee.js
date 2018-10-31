@@ -37,62 +37,6 @@ router.get('/getdonations', async (req, res, next) => {
     });
 });
 
-router.get('/searchdonations', async (req, res, next) => {
-    var locationId = -1;
-    if (req.user.role == 'admins' && req.query.location) {
-        locationId = await pool.query('SELECT id FROM locations WHERE name = $1', [req.query.location]);
-        if (locationId.rows.length != 1) {
-            res.status(400).json({
-                error: 1300,
-                msg: 'Location not found?'
-            });
-            return;
-        } else {
-            locationId = locationId.rows[0].id;
-        }
-    } else if (req.user.role != 'admins') {
-        locationId = await pool.query('SELECT locationid FROM employees WHERE username = $1 UNION SELECT locationid FROM managers WHERE username = $1', [req.user.user]);
-        if (locationId.rows.length != 1) {
-            res.status(400).json({
-                error: 1300,
-                msg: 'User not found possibly relog in?'
-            });
-            return;
-        } else {
-            locationId = locationId.rows[0].locationid;
-        }
-    }
-
-    var paramList = [];
-    var whereList = [];
-
-    if (locationId != -1) {
-        paramList.push(locationId);
-        whereList.push('locationid = $' + paramList.length);
-    }
-
-    if (req.query.name) {
-        paramList.push('%' + req.query.name + '%');
-        whereList.push('name ILIKE $' + paramList.length);
-    }
-
-    if (req.query.category) {
-        paramList.push(req.query.category);
-        whereList.push('category = $' + paramList.length);
-    }
-    var donations = -1;
-    if (paramList.length > 0) {
-        donations = await pool.query('SELECT * FROM donations WHERE ' + whereList.join(' AND '), paramList);
-    } else {
-        donations = await pool.query('SELECT * FROM donations');
-    }
-    res.status(200).json({
-        error: 0,
-        msg: 'Donations you searched for',
-        donations: donations.rows
-    });
-});
-
 router.post('/adddonation', async (req, res, next) => {
     if (req.user.role == 'admins') {
         var donations = await pool.query('SELECT * FROM donations');
