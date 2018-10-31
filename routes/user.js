@@ -1,5 +1,15 @@
 var router = require('express-promise-router')();
 
+const {
+    Pool,
+    Client
+} = require('pg');
+
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+})
+
 module.exports = router;
 router.get('/searchdonations', async (req, res, next) => {
     var locationId = -1;
