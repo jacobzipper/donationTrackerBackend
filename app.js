@@ -22,12 +22,17 @@ app.set("view engine", "ejs");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
-const jwtAuth = jwt({ secret: new Buffer(PUBLIC_KEY), issuer: "scrumlords" });
+const jwtAuth = jwt({
+  secret: new Buffer(PUBLIC_KEY),
+  issuer: "scrumlords"
+});
 
 app.use("/", indexRouter);
 app.use(
@@ -67,6 +72,7 @@ app.use(
     next();
   },
   indexRouter,
+  userRouter,
   employeeRouter,
   managerRouter
 );
