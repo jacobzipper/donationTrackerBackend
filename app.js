@@ -14,6 +14,10 @@ var managerRouter = require("./routes/manager");
 
 var app = express();
 
+// CORS setup
+app.use(cors());
+app.options("*", cors());
+
 const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, "\n");
 
 // view engine setup
@@ -22,12 +26,13 @@ app.set("view engine", "ejs");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: false
-}));
+app.use(
+  express.urlencoded({
+    extended: false
+  })
+);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors());
 
 const jwtAuth = jwt({
   secret: new Buffer(PUBLIC_KEY),
